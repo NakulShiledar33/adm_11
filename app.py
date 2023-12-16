@@ -19,6 +19,7 @@ Y_df = cachedCreateTargets(transcript_feats, portfolio_df)
 # Create full dataset for model fitting
 df_full, df = getTrainingDataset(transcript_feats, Y_df, return_df_full=True)
 
+st.set_option('browser.gatherUsageStats', False)
 
 
 # Page options
