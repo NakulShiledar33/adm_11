@@ -5,23 +5,38 @@ from utils.extract_transform import *
 from utils.inference import *
 from utils.charts import *
 
+@st.cache
 # Load and clean dataframes
-portfolio_df = cachedLoadAndCleanPortfolio()
-profile, profile_df = cachedLoadAndCleanProfile(return_raw=True)
-transcript_df = cachedLoadAndCleanTranscript()
+# portfolio_df = cachedLoadAndCleanPortfolio()
+# profile, profile_df = cachedLoadAndCleanProfile(return_raw=True)
+# transcript_df = cachedLoadAndCleanTranscript()
 
-# Create demographic groups
-demographics = createDemographicGroups(profile)
-# Feature engineering
-transcript_feats = cachedCreateTranscriptFeatures(transcript_df, portfolio_df, profile_df)
-# Create target
-Y_df = cachedCreateTargets(transcript_feats, portfolio_df)
-# Create full dataset for model fitting
-df_full, df = getTrainingDataset(transcript_feats, Y_df, return_df_full=True)
+# # Create demographic groups
+# demographics = createDemographicGroups(profile)
+# # Feature engineering
+# transcript_feats = cachedCreateTranscriptFeatures(transcript_df, portfolio_df, profile_df)
+# # Create target
+# Y_df = cachedCreateTargets(transcript_feats, portfolio_df)
+# # Create full dataset for model fitting
+# df_full, df = getTrainingDataset(transcript_feats, Y_df, return_df_full=True)
+def load_and_clean_data():
+    portfolio_df = cachedLoadAndCleanPortfolio()
+    profile, profile_df = cachedLoadAndCleanProfile(return_raw=True)
+    transcript_df = cachedLoadAndCleanTranscript()
 
+    demographics = createDemographicGroups(profile)
+    transcript_feats = cachedCreateTranscriptFeatures(transcript_df, portfolio_df, profile_df)
+    Y_df = cachedCreateTargets(transcript_feats, portfolio_df)
+    df_full, df = getTrainingDataset(transcript_feats, Y_df, return_df_full=True)
+
+    return portfolio_df, profile, profile_df, transcript_df, demographics, transcript_feats, Y_df, df_full, df
+
+# Load data using the cached function
+portfolio_df, profile, profile_df, transcript_df, demographics, transcript_feats, Y_df, df_full, df = load_and_clean_data()
 
 
 # Page options
+
 pages = [
   "Home",
   "Targeted Demographics - Descriptive Approach",
